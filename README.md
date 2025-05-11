@@ -42,7 +42,7 @@ digit-recognizer/
 ### 1. Install Dependencies
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Khayal-Aghazada/handwritten-digit-recognition-model
 cd digit-recognizer
 pip install -r requirements.txt
 ```

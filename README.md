@@ -1,149 +1,93 @@
 # Handwritten Digit Recognition Model
 
-An end-to-end project that trains a Convolutional Neural Network (CNN) from scratch on MNIST and serves a “draw-and-guess” web application where users can sketch digits and see live predictions.
----
+An end-to-end Python project that trains a Convolutional Neural Network (CNN) from scratch on MNIST and serves a live “draw-and-guess” web interface where users can sketch digits and see real-time predictions—no external model downloads or paid APIs required.
 
-What This System Does
-The Handwritten Digit Recognition Model is a full-stack demonstration of how to train and deploy a deep learning model end-to-end:
+🚀 **Features**
+- **Live Drawing Interface**  
+  400×400 HTML5 `<canvas>` where users draw digits with mouse or touch  
+- **Real-Time Guessing**  
+  Throttled server calls every 500 ms + on pointer-up to update predictions instantly  
+- **Dual-Panel Display**  
+  Digits **0–4** in the left sidebar, **5–9** in the right sidebar, each with percentage and progress bar  
+- **Custom Preprocessing**  
+  OpenCV pipeline: Base64 → composite α → grayscale → threshold → crop → center → resize (28×28)  
+- **Train From Scratch**  
+  PyTorch CNN trained with MNIST + simple augmentations (rotation, translation)
 
-Data Preparation & Training
+📦 **Technology Stack**
+- **Language & Frameworks**: Python 3.8+, Flask, PyTorch, torchvision, OpenCV  
+- **Frontend**: HTML5 Canvas, CSS3 (Flexbox, gradients), Vanilla JavaScript (Fetch API)  
+- **Data**: MNIST dataset (auto-downloaded)  
+- **Training**: `training/train.py` script, uses `training/dataset.py` for data loading & augmentation  
 
-Automatically downloads the MNIST dataset of 70,000 handwritten digit images.
-
-Applies on-the-fly augmentations (small rotations and translations) to make the network robust to varied handwriting styles.
-
-Trains a custom Convolutional Neural Network (CNN) from scratch for 10 epochs using PyTorch, saving the learned weights (digit_net.pth) for inference.
-
-Real-Time Drawing Interface
-
-Presents a 400×400 HTML5 <canvas> where users freely draw digits with mouse or touch.
-
-Captures the drawing every 500 ms (and when the user lifts the pointer) and sends it to the server for prediction.
-
-Image Preprocessing Pipeline
-
-Receives the Base64-encoded PNG, decodes it via OpenCV, and composites any transparency over a white background.
-
-Converts to grayscale, thresholds to isolate the digit, crops to its bounding box, pads to a square, and resizes to the 28×28 format the CNN expects.
-
-Normalizes pixel values to match training conditions.
-
-Model Inference & Feedback
-
-Runs the preprocessed image through the trained CNN in Flask, obtaining a probability distribution over digits 0–9.
-
-Splits the results into two side panels—digits 0–4 on the left, 5–9 on the right—highlighting the top guess.
-
-Displays each probability as a percentage and as a horizontal progress bar for quick visual feedback.
-
----
-
-## Repository Structure
-
-```
-digit-recognizer/
-├── app/                   # Flask web application
-│   ├── static/            # CSS & JavaScript assets
-│   │   ├── css/
-│   │   │   └── style.css
-│   │   └── js/
-│   │       └── app.js
-│   ├── templates/         # HTML templates
-│   │   └── index.html
-│   ├── __init__.py
-│   ├── app.py             # Flask app entrypoint
-│   ├── model.py           # CNN architecture (PyTorch)
-│   └── preprocess.py      # Base64 → OpenCV → PyTorch tensor
-│
-├── data/                  # MNIST data and any collected feedback
-│
-├── models/                # Checkpoints
-│   └── digit_net.pth      # Trained model weights
-│
-├── training/              # Training scripts
-│   ├── __init__.py
-│   ├── dataset.py         # Data loader with augmentations
-│   └── train.py           # Train script (10 epochs by default)
-│
-├── requirements.txt       # Python dependencies
-└── README.md              # This file
-```
-
----
-
-## Quick Start
-
-### 1. Install Dependencies
-
+🔧 **Installation & Setup**
 ```bash
-git clone https://github.com/Khayal-Aghazada/handwritten-digit-recognition-model
-cd digit-recognizer
+git clone https://github.com/Khayal-Aghazada/handwritten-digit-recognition-model.git
+cd handwritten-digit-recognition-model
+python3 -m venv .venv
+# macOS/Linux
+source .venv/bin/activate
+# Windows
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-**requirements.txt** includes:
-```
-torch
-torchvision
-flask
-opencv-python
-numpy
-tqdm
-```
-
----
-
-### 2. Train the Model
-
-The training script will download MNIST (if needed), apply simple augmentations, and train (or continue training) for 10 epochs, saving the best model to `models/digit_net.pth`.
-
+▶️ **Train the Model**
 ```bash
 cd training
 python train.py
 ```
+- Downloads MNIST into `../data/`  
+- Applies random rotations (±15°) and translations (±10%)  
+- Trains (or fine-tunes) for 10 epochs  
+- Saves best and latest weights to `../models/digit_net.pth`
 
-- Downloads MNIST into `data/`  
-- Applies random rotations and translations to training data  
-- Trains for 10 epochs (CPU or GPU)  
-- Saves the model weights to `models/digit_net.pth`
-
----
-
-### 3. Run the Web App
-
-In a separate terminal, start the Flask server:
-
+▶️ **Run the Web App**
+```bash
+# From project root
+python -m app.app
+```
+or
 ```bash
 cd app
 python app.py
 ```
+- Launches Flask server at **http://127.0.0.1:5000**  
+- Draw a digit, see live predictions with confidence bars
 
-or from project root:
-
-```bash
-python -m app.app
+📁 **Project Structure**
+```
+handwritten-digit-recognition-model/
+├── app/                       # Flask web application
+│   ├── static/                # CSS & JS assets
+│   │   ├── css/style.css
+│   │   └── js/app.js
+│   ├── templates/index.html   # Drawing UI
+│   ├── app.py                 # Flask routes
+│   ├── model.py               # CNN definition
+│   └── preprocess.py          # OpenCV preprocessing
+│
+├── data/                      # MNIST dataset & feedback (optional)
+├── models/                    # Model checkpoints
+│   └── digit_net.pth
+├── requirements.txt           # Python dependencies
+├── training/                  # Training scripts
+│   ├── dataset.py             # DataLoader & transforms
+│   └── train.py               # 10-epoch training script
+└── README.md                  # This file
 ```
 
-- Opens a server at **http://127.0.0.1:5000**  
-- Provides a 400×400 canvas where you can draw a digit  
-- Shows live-updating predictions for digits **0–4** (left panel) and **5–9** (right panel)  
-- Displays horizontal progress bars indicating prediction confidence  
+🛠️ **Customization**
+- **Canvas Size & Style**: Edit `templates/index.html` and `static/css/style.css`  
+- **Prediction Interval**: Adjust `GUESS_INTERVAL` in `app/static/js/app.js`  
+- **Model Architecture**: Modify `app/model.py` for deeper or wider CNN  
+- **Augmentations**: Tweak rotation/translation ranges in `training/dataset.py`
 
----
+🤝 **Contributing**
+1. Fork this repository  
+2. Create a feature branch (`git checkout -b feature/xyz`)  
+3. Make your changes and commit (`git commit -m "feat: Add xyz"`)  
+4. Push to your branch and open a Pull Request  
 
-## How It Works
-
-1. **Frontend**  
-   - HTML5 `<canvas>` for drawing  
-   - JavaScript captures strokes, sends the image every 500 ms and on pen-up to `/predict`  
-   - Results rendered as percentages and bars in side panels  
-
-2. **Backend**  
-   - Flask serves the web page and handles `/predict` requests  
-   - `preprocess.py` uses OpenCV to decode, threshold, crop, center, and resize the drawing to 28×28  
-   - PyTorch loads `digit_net.pth` and runs inference, returning probabilities for each digit  
-
-3. **Model**  
-   - A simple CNN defined in `model.py`  
-   - Trained from scratch on MNIST with data augmentations  
-   - Saved as `models/digit_net.pth`
+📜 **License**
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

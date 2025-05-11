@@ -1,0 +1,116 @@
+/* page background gradient */
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #c9b2f4 0%, #e1d4f9 50%, #ad89ef 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* overall three-column layout */
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* sidebars styling */
+#sidebar-left,
+#sidebar-right {
+  width: 120px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.8);
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+#sidebar-left ul,
+#sidebar-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#sidebar-left li,
+#sidebar-right li {
+  font-size: 1rem;
+  color: #4a2c69;
+  margin: 0.2rem 0;
+}
+
+#sidebar-left li.high,
+#sidebar-right li.high {
+  font-weight: bold;
+  color: #ad89ef;
+}
+
+/* center card */
+.container {
+  text-align: center;
+  background: #f3e8ff;    /* pale lavender card */
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  min-width: 440px;
+}
+
+h1 {
+  margin-top: 0;
+  color: #4a2c69;
+}
+
+/* big drawing canvas */
+canvas {
+  border: 4px solid #ad89ef;
+  border-radius: 8px;
+  touch-action: none;
+  cursor: crosshair;
+  display: block;
+  margin: 1rem auto;
+}
+
+/* buttons */
+.buttons {
+  margin: 1rem 0;
+}
+
+button {
+  background: #ad89ef;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  margin: 0 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #9c78e0;
+}
+
+/* Progress bar container (light background) */
+.bar {
+  background: rgba(0,0,0,0.05);
+  border-radius: 4px;
+  height: 8px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+/* Filled portion */
+.bar-fill {
+  height: 100%;
+  background: #ad89ef;
+  border-radius: 4px 0 0 4px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
